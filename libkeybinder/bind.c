@@ -362,6 +362,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 {
 	XEvent *xevent = (XEvent *) gdk_xevent;
 	GdkKeymap *keymap = gdk_keymap_get_default();
+	GdkWindow *rootwin = gdk_get_default_root_window ();
 	guint keyval;
 	GdkModifierType consumed, modifiers;
 	guint mod_mask = gtk_accelerator_get_default_mod_mask();
@@ -422,6 +423,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 				TRACE (g_print ("Calling handler for '%s'...\n", 
 						binding->keystring));
 
+				XUngrabKeyboard(GDK_WINDOW_XDISPLAY(rootwin), last_event_time);
 				(binding->handler) (binding->keystring, 
 						    binding->user_data);
 			}
